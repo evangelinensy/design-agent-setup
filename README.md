@@ -12,13 +12,13 @@ Adds a skill file that teaches your AI coding agent how to write UI code that ac
 
 ## What it does
 
-1. **Detects your agent** — looks for `.cursor/`, `CLAUDE.md`, `.windsurfproject`
+1. **Detects your agent** — looks for `.cursor/`, `CLAUDE.md`, `AGENTS.md`
 2. **Detects your stack** — reads `package.json` for tailwindcss, next, shadcn-ui, framer-motion
 3. **Asks where to write** — choose one agent, all detected, or standalone `.md`
 4. **Writes to the right location:**
    - Cursor → `.cursor/rules/design-agent-frontend.mdc`
    - Claude Code → appended to `CLAUDE.md`
-   - Windsurf → appended to `.windsurfrules`
+   - Codex → appended to `AGENTS.md`
    - Standalone → `design-agent-frontend.md` in the project root
 
 Stack-specific rule blocks are automatically appended based on what's in your `package.json`.

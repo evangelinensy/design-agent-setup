@@ -38,7 +38,7 @@ function detectAgents(cwd) {
   const detected = [];
   if (fs.existsSync(path.join(cwd, '.cursor'))) detected.push('cursor');
   if (fs.existsSync(path.join(cwd, 'CLAUDE.md'))) detected.push('claude');
-  if (fs.existsSync(path.join(cwd, '.windsurfproject'))) detected.push('windsurf');
+  if (fs.existsSync(path.join(cwd, 'AGENTS.md'))) detected.push('codex');
   return detected;
 }
 
@@ -164,15 +164,16 @@ function writeClaude(cwd, content) {
   return dest;
 }
 
-function writeWindsurf(cwd, content) {
-  const dest = path.join(cwd, '.windsurfrules');
+function writeCodex(cwd, content) {
+  const dest = path.join(cwd, 'AGENTS.md');
+  const block = `\n\n<!-- design-agent-frontend -->\n${content}\n<!-- /design-agent-frontend -->`;
   if (fs.existsSync(dest)) {
     const existing = fs.readFileSync(dest, 'utf8');
-    if (existing.includes('Frontend Design Agent Rules')) {
-      log(yellow('  .windsurfrules already contains design-agent-frontend rules — skipping.'));
+    if (existing.includes('<!-- design-agent-frontend -->')) {
+      log(yellow('  AGENTS.md already contains design-agent-frontend rules — skipping.'));
       return dest;
     }
-    fs.appendFileSync(dest, '\n\n' + content, 'utf8');
+    fs.appendFileSync(dest, block, 'utf8');
   } else {
     fs.writeFileSync(dest, content, 'utf8');
   }
@@ -213,7 +214,7 @@ async function main() {
   if (agents.length > 0) {
     log(cyan('  Agents detected: ') + agents.join(', '));
   } else {
-    log(gray('  No agents detected (no .cursor/, CLAUDE.md, or .windsurfproject found)'));
+    log(gray('  No agents detected (no .cursor/, CLAUDE.md, or AGENTS.md found)'));
   }
 
   if (stack.length > 0) {
@@ -242,7 +243,7 @@ async function main() {
   const choices = [];
   if (agents.includes('cursor')) choices.push({ label: 'Cursor  → .cursor/rules/design-agent-frontend.mdc', key: 'cursor' });
   if (agents.includes('claude')) choices.push({ label: 'Claude Code  → CLAUDE.md (append)', key: 'claude' });
-  if (agents.includes('windsurf')) choices.push({ label: 'Windsurf  → .windsurfrules (append)', key: 'windsurf' });
+  if (agents.includes('codex')) choices.push({ label: 'Codex  → AGENTS.md (append)', key: 'codex' });
   choices.push({ label: 'All detected agents', key: 'all' });
   choices.push({ label: 'Standalone .md in this directory', key: 'standalone' });
 
@@ -274,7 +275,7 @@ async function main() {
   if (answer === 'all') {
     if (agents.includes('cursor')) written.push(writeCursor(cwd, content));
     if (agents.includes('claude')) written.push(writeClaude(cwd, content));
-    if (agents.includes('windsurf')) written.push(writeWindsurf(cwd, content));
+    if (agents.includes('codex')) written.push(writeCodex(cwd, content));
     if (agents.length === 0) {
       log(yellow('  No agents detected — writing standalone .md instead.'));
       written.push(writeStandalone(cwd, content));
@@ -283,8 +284,8 @@ async function main() {
     written.push(writeCursor(cwd, content));
   } else if (answer === 'claude') {
     written.push(writeClaude(cwd, content));
-  } else if (answer === 'windsurf') {
-    written.push(writeWindsurf(cwd, content));
+  } else if (answer === 'codex') {
+    written.push(writeCodex(cwd, content));
   } else if (answer === 'standalone') {
     written.push(writeStandalone(cwd, content));
   }
