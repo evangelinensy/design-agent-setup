@@ -1,0 +1,34 @@
+{
+  "name": "design-agent-setup",
+  "version": "1.0.0",
+  "description": "Drop a frontend design vocabulary skill into your coding agent (Cursor, Claude Code, Windsurf)",
+  "type": "module",
+  "bin": {
+    "design-agent-setup": "./bin/index.js"
+  },
+  "files": [
+    "bin/",
+    "templates/",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "design",
+    "frontend",
+    "cursor",
+    "claude",
+    "windsurf",
+    "ai",
+    "agent",
+    "tailwind",
+    "nextjs"
+  ],
+  "author": "Evangeline Ng",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evangelineng/design-agent-setup.git"
+  }
+}
